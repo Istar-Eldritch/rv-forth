@@ -1,0 +1,10 @@
+[target.riscv32i-unknown-none-elf]
+runner = "/home/istar/Downloads/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-ubuntu14/bin/riscv64-unknown-elf-gdb -q -x gdb_init"
+rustflags = [
+    "-C", "link-arg=link.x",
+    "--cfg", "portable_atomic_unsafe_assume_single_core",
+]
+
+[build]
+target = "riscv32i-unknown-none-elf"
+

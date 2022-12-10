@@ -1,0 +1,143 @@
+#![allow(dead_code)]
+use register_interface::*;
+
+#[register(priority1, PriorityReg, 4)]
+#[register(priority2, PriorityReg, 8)]
+#[register(priority3, PriorityReg, 12)]
+#[register(priority4, PriorityReg, 16)]
+#[register(priority5, PriorityReg, 20)]
+#[register(priority6, PriorityReg, 24)]
+#[register(priority7, PriorityReg, 28)]
+#[register(priority8, PriorityReg, 32)]
+#[register(priority9, PriorityReg, 36)]
+#[register(priority10, PriorityReg, 40)]
+#[register(priority11, PriorityReg, 44)]
+#[register(priority12, PriorityReg, 48)]
+#[register(priority13, PriorityReg, 52)]
+#[register(priority14, PriorityReg, 56)]
+#[register(priority15, PriorityReg, 60)]
+#[register(priority16, PriorityReg, 64)]
+#[register(priority17, PriorityReg, 68)]
+#[register(priority18, PriorityReg, 72)]
+#[register(priority19, PriorityReg, 76)]
+#[register(priority20, PriorityReg, 80)]
+#[register(priority21, PriorityReg, 84)]
+#[register(priority22, PriorityReg, 88)]
+#[register(priority23, PriorityReg, 92)]
+#[register(priority24, PriorityReg, 96)]
+#[register(priority25, PriorityReg, 100)]
+#[register(priority26, PriorityReg, 104)]
+#[register(priority27, PriorityReg, 108)]
+#[register(priority28, PriorityReg, 112)]
+#[register(priority29, PriorityReg, 116)]
+#[register(priority30, PriorityReg, 120)]
+#[register(priority31, PriorityReg, 124)]
+#[register(priority32, PriorityReg, 128)]
+#[register(priority33, PriorityReg, 132)]
+#[register(priority34, PriorityReg, 136)]
+#[register(priority35, PriorityReg, 140)]
+#[register(priority36, PriorityReg, 144)]
+#[register(priority37, PriorityReg, 148)]
+#[register(priority38, PriorityReg, 152)]
+#[register(priority39, PriorityReg, 156)]
+#[register(priority40, PriorityReg, 160)]
+#[register(priority41, PriorityReg, 164)]
+#[register(priority42, PriorityReg, 168)]
+#[register(priority43, PriorityReg, 172)]
+#[register(priority44, PriorityReg, 176)]
+#[register(priority45, PriorityReg, 180)]
+#[register(priority46, PriorityReg, 184)]
+#[register(priority47, PriorityReg, 188)]
+#[register(priority48, PriorityReg, 192)]
+#[register(priority49, PriorityReg, 196)]
+#[register(priority50, PriorityReg, 200)]
+#[register(priority51, PriorityReg, 204)]
+#[register(priority52, PriorityReg, 208)]
+#[register(pending1, PositionalReg1, 0x1000)]
+#[register(pending2, PositionalReg2, 0x1004)]
+#[register(enabled1, PositionalReg1, 0x2000)]
+#[register(enabled2, PositionalReg2, 0x2004)]
+#[register(threshold, BaseReg, 0x20_0000)]
+#[register(claim, BaseReg, 0x20_0004)]
+pub struct Plic {
+    addr: *mut usize,
+}
+
+impl Plic {
+    pub fn new(addr: *mut usize) -> Self {
+        Plic { addr }
+    }
+}
+
+#[field(priority, 0, 2)]
+pub struct PriorityReg {
+    addr: *mut usize,
+}
+
+#[field(bit0, 0, 0)]
+#[field(bit1, 1, 1)]
+#[field(bit2, 2, 2)]
+#[field(bit3, 3, 3)]
+#[field(bit4, 4, 4)]
+#[field(bit5, 5, 5)]
+#[field(bit6, 6, 6)]
+#[field(bit7, 7, 7)]
+#[field(bit8, 8, 8)]
+#[field(bit9, 9, 9)]
+#[field(bit10, 10, 10)]
+#[field(bit11, 11, 11)]
+#[field(bit12, 12, 12)]
+#[field(bit13, 13, 13)]
+#[field(bit14, 14, 14)]
+#[field(bit15, 15, 15)]
+#[field(bit16, 16, 16)]
+#[field(bit17, 17, 17)]
+#[field(bit18, 18, 18)]
+#[field(bit19, 19, 19)]
+#[field(bit20, 20, 20)]
+#[field(bit21, 21, 21)]
+#[field(bit22, 22, 22)]
+#[field(bit23, 23, 23)]
+#[field(bit24, 24, 24)]
+#[field(bit25, 25, 25)]
+#[field(bit26, 26, 26)]
+#[field(bit27, 27, 27)]
+#[field(bit28, 28, 28)]
+#[field(bit29, 29, 29)]
+#[field(bit30, 30, 30)]
+#[field(bit31, 31, 31)]
+#[field(all, 0, 31)]
+pub struct PositionalReg1 {
+    addr: *mut usize,
+}
+
+#[field(bit32, 32, 32)]
+#[field(bit33, 33, 33)]
+#[field(bit34, 34, 34)]
+#[field(bit35, 35, 35)]
+#[field(bit36, 36, 36)]
+#[field(bit37, 37, 37)]
+#[field(bit38, 38, 38)]
+#[field(bit39, 39, 39)]
+#[field(bit40, 40, 40)]
+#[field(bit41, 41, 41)]
+#[field(bit42, 42, 42)]
+#[field(bit43, 43, 43)]
+#[field(bit44, 44, 44)]
+#[field(bit45, 45, 45)]
+#[field(bit46, 46, 46)]
+#[field(bit47, 47, 47)]
+#[field(bit48, 48, 48)]
+#[field(bit49, 49, 49)]
+#[field(bit50, 50, 50)]
+#[field(bit51, 51, 51)]
+#[field(bit52, 52, 52)]
+#[field(all, 0, 31)]
+pub struct PositionalReg2 {
+    addr: *mut usize,
+}
+
+#[field(all, 0, 31)]
+pub struct BaseReg {
+    addr: *mut usize,
+}
