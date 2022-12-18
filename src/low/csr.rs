@@ -1,5 +1,4 @@
 use core::arch::asm;
-use register_interface::*;
 
 #[link_section = ".bss"]
 static mut MEPC: usize = 0;

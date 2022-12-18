@@ -6,21 +6,16 @@
 extern crate alloc;
 mod allocator;
 mod collections;
-mod csr;
-mod hash;
 mod low;
-mod plic;
+mod hash;
 mod state;
-mod uart;
 
-use low::{halt, wfi};
-
-use collections::Vec;
+use low::asm::{halt, wfi};
+use low::csr::{MCause, MStatus, Mie};
+use low::plic::Plic;
+use low::uart::Uart;
 use core::panic::PanicInfo;
-use csr::{MCause, MStatus, Mie};
-use plic::Plic;
 use state::State;
-use uart::Uart;
 
 #[no_mangle]
 pub fn _start() {
@@ -37,18 +32,14 @@ pub fn _start() {
     let mut mstatus = MStatus::new();
     mstatus.set_mie(true); // enable interrupts
     mstatus.apply();
-    let mut v = Vec::new();
-    v.push(97);
     loop {
-        //if let Some(_v) = map.get("test") {
         wfi();
-        // }
     }
 }
 
 #[panic_handler]
 fn panic_handler(_arg: &PanicInfo) -> ! {
-    halt();
+    halt()
 }
 
 #[no_mangle]
@@ -66,6 +57,7 @@ fn m_trap_handler() {
                 while let Some(data) = state.input_buffer.pop() {
                     uart0.txdata().set_data(data as usize);
                 }
+                uart0.txdata().set_data(10);
             } else {
                 let data = if data >= 97 && data <= 122 {
                     data - 32
