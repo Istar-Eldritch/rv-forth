@@ -1,8 +1,8 @@
 use crate::collections::{Map, Vec};
-use alloc::boxed::Box;
 use crate::low::uart::Uart;
-use core::fmt::Write;
 use crate::state::State;
+use alloc::boxed::Box;
+use core::fmt::Write;
 
 type Stack = Vec<u32>;
 type Data = Vec<u8>;
@@ -26,7 +26,7 @@ enum BuiltinWord {
     Minus,
     Star,
     Slash,
-    Dot
+    Dot,
 }
 
 impl Word for BuiltinWord {
@@ -46,7 +46,7 @@ impl Word for BuiltinWord {
             Minus => "-",
             Star => "*",
             Slash => "/",
-            Dot => "."
+            Dot => ".",
         }
     }
 
@@ -58,28 +58,28 @@ impl Word for BuiltinWord {
                 let x = stack.pop().unwrap();
                 let addr = stack.pop().unwrap() as *mut u32;
                 unsafe { *addr = x };
-            },
+            }
             Fetch => {
                 let addr = stack.pop().unwrap() as *mut u32;
-                stack.push( unsafe { *addr });
-            },
+                stack.push(unsafe { *addr });
+            }
             Comma => {
                 let x = stack.pop().unwrap();
-                let x: [u8;4] = unsafe { core::mem::transmute(x) };
+                let x: [u8; 4] = unsafe { core::mem::transmute(x) };
                 for &v in x.iter() {
                     data.push(v);
                 }
-            },
+            }
             Align => {
                 let out = data.len() % 4;
                 if out != 0 {
                     data.push(0);
                 }
-            },
+            }
             Cells => {
                 let x = stack.pop().unwrap();
                 stack.push(x * 4);
-            },
+            }
             CStore => {
                 let x = stack.pop().unwrap() as u8;
                 let addr = stack.pop().unwrap() as *mut u8;
@@ -91,7 +91,7 @@ impl Word for BuiltinWord {
             }
             CFetch => {
                 let addr = stack.pop().unwrap() as *const u8;
-                stack.push( unsafe { *addr as u32 });
+                stack.push(unsafe { *addr as u32 });
             }
             Chars => {
                 // No OP (is the same value)
@@ -116,7 +116,7 @@ impl Word for BuiltinWord {
                 let op2 = stack.pop().unwrap();
                 stack.push(op1 / op2);
             }
-            Dot  => {
+            Dot => {
                 let mut uart0 = Uart::new(0x1001_3000 as *mut usize);
                 let v = stack.pop().unwrap();
                 write!(uart0, "{}\n", v).unwrap();
@@ -147,8 +147,7 @@ pub fn eval(state: &mut State) {
     let input = core::str::from_utf8(&state.input_buffer).unwrap();
     if let Some(v) = state.forth.dictionary.get(input) {
         v.execute(&mut state.forth.stack, &mut state.forth.data_space);
-    }
-    else if let Ok(n) = input.parse::<u32>() {
+    } else if let Ok(n) = input.parse::<u32>() {
         state.forth.stack.push(n);
     } else {
         write!(state.mpu.uart0, "unrecognised input\n").unwrap();
