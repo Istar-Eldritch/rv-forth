@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 use register_interface::*;
 
+
 #[register(txdata, TxData, 0x0)]
 #[register(rxdata, RxData, 0x4)]
 #[register(txctrl, TxCtrl, 0x08)]
@@ -55,3 +56,13 @@ pub struct InterruptRegister {
 pub struct Div {
     addr: *mut usize,
 }
+
+impl core::fmt::Write for Uart {
+    fn write_str(&mut self, s: &str) -> core::fmt::Result {
+        for byte in s.bytes().into_iter() {
+            self.txdata().set_data(byte as usize);
+        }
+        Ok(())
+    }
+}
+

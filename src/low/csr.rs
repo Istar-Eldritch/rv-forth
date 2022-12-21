@@ -146,3 +146,15 @@ impl MCause {
         self.0 & 0x8000_0000 != 0
     }
 }
+
+pub struct MTVal(usize);
+
+impl MTVal {
+    pub fn get() -> u32 {
+        let mut val;
+        unsafe {
+            asm!("csrr {v}, mtval", v = out(reg) val)
+        };
+        val
+    }
+}

@@ -5,7 +5,8 @@ ENTRY(_start)
 
 MEMORY
 {
-	ROM (rwx) : ORIGIN = 0x00000000, LENGTH = 200K 
+	ROM (rx) : ORIGIN = 0x00000000, LENGTH = 50K
+  RAM (rw) : ORIGIN = 0x0000c800, LENGTH = 150K
 }
 
 SECTIONS
@@ -14,13 +15,13 @@ SECTIONS
   .rodata : { *(.rodata); } > ROM
   .text : { *(.text.*); } > ROM
   .trap : ALIGN(4) { *(.trap); } > ROM
+  .alloc : { *(.alloc); } > ROM
 
-
-  .data (NOLOAD): { *(.data.*); } > ROM
-  .sdata (NOLOAD) : { *(.sdata); } > ROM
-  .bss (NOLOAD) : { *(.bss); } > ROM
+  .data (NOLOAD): { *(.data.*); } > RAM
+  .sdata (NOLOAD) : { *(.sdata); } > RAM
+  .bss (NOLOAD) : { *(.bss); } > RAM
 
 }
 
 PROVIDE(_hart_stack_size = 2K);
-PROVIDE(_stack_start = ORIGIN(ROM) + LENGTH(ROM));
+PROVIDE(_stack_start = ORIGIN(RAM) + LENGTH(RAM));

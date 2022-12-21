@@ -1,14 +1,30 @@
-use crate::hash::DJB2;
-use alloc::alloc::{alloc, dealloc, realloc};
 use core::alloc::Layout;
+use alloc::alloc::{dealloc, realloc, alloc};
 use core::hash::{Hash, Hasher};
 use core::marker::PhantomData;
 use core::ops::{Deref, DerefMut};
+use crate::hash::DJB2;
 
 pub struct Vec<T> {
     ptr: *mut T,
     len: usize,
     cap: usize,
+}
+
+impl <T: core::fmt::Debug> core::fmt::Debug for Vec<T> {
+    fn fmt(&self, fmt: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
+        for (idx, elem) in self.iter().enumerate() {
+            if idx == 0 {
+                write!(fmt, "Vec [ ")?;
+            }
+            if idx == self.len() -1 {
+                write!(fmt, "{elem:?} ]")?;
+            } else {
+                write!(fmt, "{elem:?}, ")?;
+            }
+        }
+        Ok(())
+    }
 }
 
 impl<T> Vec<T> {
@@ -24,6 +40,10 @@ impl<T> Vec<T> {
             len: 0,
             cap,
         }
+    }
+
+    pub fn purge(&mut self) {
+        self.len = 0;
     }
 
     unsafe fn grow(&mut self) {
@@ -81,7 +101,7 @@ impl<T> Vec<T> {
                 self.ptr.add(index),
                 self.ptr.add(index + 1),
                 self.len - index,
-            );
+                );
             core::ptr::write(self.ptr.add(index), elem);
             self.len += 1;
         }
@@ -97,7 +117,7 @@ impl<T> Vec<T> {
                 self.ptr.add(index + 1),
                 self.ptr.add(index),
                 self.len - index,
-            );
+                );
             result
         }
     }

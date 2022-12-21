@@ -4,7 +4,8 @@
 use core::alloc::{GlobalAlloc, Layout};
 
 #[global_allocator]
-static ALLOCATOR: Mutex<BumpAllocator> = Mutex::new(BumpAllocator::new(50000, 98000));
+#[link_section = ".alloc"]
+static ALLOCATOR: Mutex<BumpAllocator> = Mutex::new(BumpAllocator::new(1024 * 50, 1025 * 140));
 
 pub struct Mutex<A> {
     inner: spin::Mutex<A>,
