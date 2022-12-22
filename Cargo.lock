@@ -5,6 +5,9 @@ version = 3
 [[package]]
 name = "forth"
 version = "0.1.0"
+dependencies = [
+ "riscv_isa_types",
+]
 
 [[package]]
 name = "forth-repl"
@@ -12,6 +15,16 @@ version = "0.1.0"
 dependencies = [
  "register-interface",
  "spin",
+]
+
+[[package]]
+name = "macros"
+version = "0.1.0"
+source = "git+https://github.com/Istar-Eldritch/riscv-emu#283ac03247a62318e654e5d5a1f6bde2fe1d2081"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -45,6 +58,14 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "riscv_isa_types"
+version = "0.1.0"
+source = "git+https://github.com/Istar-Eldritch/riscv-emu#283ac03247a62318e654e5d5a1f6bde2fe1d2081"
+dependencies = [
+ "macros",
 ]
 
 [[package]]
