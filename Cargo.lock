@@ -3,18 +3,18 @@
 version = 3
 
 [[package]]
-name = "forth"
-version = "0.1.0"
-dependencies = [
- "riscv_isa_types",
-]
-
-[[package]]
 name = "forth-repl"
 version = "0.1.0"
 dependencies = [
  "register-interface",
  "spin",
+]
+
+[[package]]
+name = "forth_compiler"
+version = "0.1.0"
+dependencies = [
+ "riscv_isa_types",
 ]
 
 [[package]]
